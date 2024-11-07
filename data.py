@@ -1,5 +1,5 @@
-campusMap = {
-    "Nutwood Parking Structure": {},
+campusMap_nodes = {
+    "Nutwood Parking Structure": (1000, 1000),
     "Eastside Parking Structure": {},
     "State College Parking Structure": {},
     "Parking Lot A": {},
@@ -26,4 +26,4 @@ campusMap = {
 }
 
 def getCampusMap():
-    return campusMap
+    return campusMap_nodes
