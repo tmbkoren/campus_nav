@@ -1,6 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from data import getCampusMap
+from data import getCampusMap, getEdges, getHelpCoords, getIntersectionNodes
 import networkx as nx
 
 def main():
@@ -18,29 +18,50 @@ def main():
     G = nx.Graph()
 
     # Sample node and edge setup
-    nodes = {"A": (100, 100), "B": (200, 200), "C": (300, 150), "D": (1000, 1000)}
-    edges = [("A", "B"), ("B", "C"), ("C", "D"), ("A", "C"), ("A", "D")]
+    helpCoords = getHelpCoords()
+    campusMap = getCampusMap()
+    intersection_nodes = getIntersectionNodes()
+    mergedMap = dict()
+    mergedMap.update(campusMap)
+    mergedMap.update(intersection_nodes)
+    edges = getEdges()
 
     # Add nodes and edges to NetworkX graph
-    for node, (x, y) in nodes.items():
+    for node, (x, y) in helpCoords.items():
         G.add_node(node, pos=(x, y))
         canvas.create_oval(x-5, y-5, x+5, y+5, fill="blue")  # Draw nodes on canvas
 
+    for node, (x, y, display) in mergedMap.items():
+        G.add_node(node, pos=(x, y))
+        if display: 
+            canvas.create_oval(x-10, y-10, x+10, y+10, fill="red")
+        else: 
+            canvas.create_oval(x-7, y-7, x+7, y+7, fill="pink")
+
+    edgeColors = ("red", "green", "blue")
+    currentColor = 0
+
     for edge in edges:
         G.add_edge(*edge)
-        x1, y1 = nodes[edge[0]]
-        x2, y2 = nodes[edge[1]]
-        line = canvas.create_line(x1, y1, x2, y2, fill="gray")
+        print(edge, edgeColors[currentColor % 3])
+        x1, y1, display1 = mergedMap[edge[0]]
+        x2, y2, display2 = mergedMap[edge[1]]
+        line = canvas.create_line(x1, y1, x2, y2, fill=edgeColors[currentColor % 3], width=3, tags=edge)  # Draw edges on canvas
+        currentColor += 1
+
+    def highlight_edge(edge):
+        canvas.itemconfig(edge, fill="yellow", width=5)
 
     # Pathfinding with visualization
     def find_path():
-        path = nx.shortest_path(G, source="A", target="D")  # Example path
+        path = nx.shortest_path(
+            G, source="Nutwood Parking Structure", target="Pollak Library")  # Example path
         for i in range(len(path)-1):
             node1, node2 = path[i], path[i+1]
-            x1, y1 = nodes[node1]
-            x2, y2 = nodes[node2]
+            x1, y1, display1 = mergedMap[node1]
+            x2, y2, display2 = mergedMap[node2]
             canvas.create_line(x1, y1, x2, y2, fill="red",
-                            width=2)  # Highlight path
+                            width=7)  # Highlight path
 
     # Trigger pathfinding
     #find_path()
