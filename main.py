@@ -39,8 +39,8 @@ def main():
         G.add_node(node, pos=(x, y))
         if display:
             canvas.create_oval(x-10, y-10, x+10, y+10, fill="red")
-        #else:
-        #    canvas.create_oval(x-7, y-7, x+7, y+7, fill="pink")
+        # else:
+        #     canvas.create_oval(x-7, y-7, x+7, y+7, fill="pink")
 
     edge_ids = {}
     for u, v, weight in edges:
@@ -48,7 +48,8 @@ def main():
         x1, y1, _ = mergedMap[u]
         x2, y2, _ = mergedMap[v]
         edge_tag = f"{u}_{v}"
-        edge_id = canvas.create_line(x1, y1, x2, y2, fill="blue", width=5, tags=(edge_tag))
+        edge_id = canvas.create_line(
+            x1, y1, x2, y2, fill="blue", width=5, tags=(edge_tag))
         edge_ids[(u, v)] = edge_id
 
         # Bind click event to each edge to toggle its state
@@ -81,7 +82,7 @@ def main():
     def reset_graph():
         for edge_id in edge_ids.values():
             canvas.itemconfig(edge_id, fill="blue", width=5)
-    
+
     def toggle_edge(u, v):
         print(f"Toggle edge: {u} -> {v}")
         edge_tag = f"{u}_{v}"
@@ -90,16 +91,14 @@ def main():
             # Disable the edge: remove it from the graph and visually gray it out
             print("Removing edge", u, v)
             G.remove_edge(u, v)
-            canvas.itemconfig(edge_tag, fill="lightgray", dash=(4, 2), width=7)
+            canvas.itemconfig(edge_tag, dash=(4, 2))
         else:
             # Enable the edge: add it back to the graph and color it
             G.add_edge(u, v, weight=1)  # Specify the original weight if needed
-            canvas.itemconfig(edge_tag, fill="blue", dash=(),
-                              width=7)  # Remove dashes
-
+            canvas.itemconfig(edge_tag, dash=())  # Remove dashes
 
     def custom_bfs(graph, start, target):
-        print(graph)
+        disalbeButtons()
         queue = [(start, [start])]
         visited = set()
 
@@ -116,6 +115,7 @@ def main():
 
                 if current_node == target:
                     highlight_path(path, "green")
+                    enableButtons()
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -128,6 +128,7 @@ def main():
 
     def custom_dfs(graph, start, target):
         stack = [(start, [start])]
+        disalbeButtons()
         visited = set()
 
         def step():
@@ -143,6 +144,7 @@ def main():
 
                 if current_node == target:
                     highlight_path(path, "green")
+                    enableButtons()
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -154,6 +156,7 @@ def main():
         step()
 
     def custom_dijkstra(graph, start, target):
+        disalbeButtons()
         queue = [(0, start, [start])]
         distances = {node: float('inf') for node in graph.nodes()}
         distances[start] = 0
@@ -168,10 +171,11 @@ def main():
                     return
 
                 visited.add(current_node)
-                #highlight_node(current_node, "yellow")
+                # highlight_node(current_node, "yellow")
 
                 if current_node == target:
                     highlight_path(path, "green")
+                    enableButtons()
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -188,28 +192,39 @@ def main():
 
         step()
 
-    tk.Button(root, text="BFS", command=lambda: custom_bfs(
-        G, startNode.get(), endNode.get())).place(x=0, y=0)
-    
-    tk.Button(root, text="DFS", command=lambda: custom_dfs(
-        G, startNode.get(), endNode.get())).place(x=0, y=30)
-    
-    tk.Button(root, text="Dijkstra", command=lambda: custom_dijkstra(
-        G, startNode.get(), endNode.get())).place(x=0, y=60)
-    
-    tk.Button(root, text="Reset", command=reset_graph).place(x=0, y=90)
+    bfsBtn = tk.Button(root, text="BFS", command=lambda: custom_bfs(
+        G, startNode.get(), endNode.get()))
+    bfsBtn.place(x=0, y=0)
+
+    dfsBtn = tk.Button(root, text="DFS", command=lambda: custom_dfs(
+        G, startNode.get(), endNode.get()))
+    dfsBtn.place(x=0, y=30)
+
+    dijBtn = tk.Button(root, text="Dijkstra", command=lambda: custom_dijkstra(
+        G, startNode.get(), endNode.get()))
+    dijBtn.place(x=0, y=60)
+
+    resetBtn = tk.Button(root, text="Reset", command=reset_graph)
+    resetBtn.place(x=0, y=90)
+
+    def disalbeButtons():
+        bfsBtn.config(state="disabled")
+        dfsBtn.config(state="disabled")
+        dijBtn.config(state="disabled")
+        resetBtn.config(state="disabled")
+
+    def enableButtons():
+        bfsBtn.config(state="normal")
+        dfsBtn.config(state="normal")
+        dijBtn.config(state="normal")
+        resetBtn.config(state="normal")
 
     comboValues = list(campusMap.keys())
 
     startNode = ttk.Combobox(root, values=comboValues)
     startNode.place(x=0, y=120)
     endNode = ttk.Combobox(root, values=comboValues)
-    endNode.place(x=0, y=140)
-
-    def print_selection():
-        print(startNode.get(), endNode.get())
-
-    tk.Button(root, text="Print Selection", command=print_selection).place(x=0, y=160)
+    endNode.place(x=0, y=150)
 
     root.mainloop()
 
