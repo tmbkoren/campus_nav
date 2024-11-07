@@ -189,17 +189,27 @@ def main():
         step()
 
     tk.Button(root, text="BFS", command=lambda: custom_bfs(
-        G, "Titan_Student_Union", "Humanities_Building")).place(x=0, y=0)
+        G, startNode.get(), endNode.get())).place(x=0, y=0)
     
     tk.Button(root, text="DFS", command=lambda: custom_dfs(
-        G, "Titan_Student_Union", "Humanities_Building")).place(x=0, y=30)
+        G, startNode.get(), endNode.get())).place(x=0, y=30)
     
     tk.Button(root, text="Dijkstra", command=lambda: custom_dijkstra(
-        G, "Titan_Student_Union", "Humanities_Building")).place(x=0, y=60)
+        G, startNode.get(), endNode.get())).place(x=0, y=60)
     
     tk.Button(root, text="Reset", command=reset_graph).place(x=0, y=90)
 
-    combo = ttk.Combobox(root)
+    comboValues = list(campusMap.keys())
+
+    startNode = ttk.Combobox(root, values=comboValues)
+    startNode.place(x=0, y=120)
+    endNode = ttk.Combobox(root, values=comboValues)
+    endNode.place(x=0, y=140)
+
+    def print_selection():
+        print(startNode.get(), endNode.get())
+
+    tk.Button(root, text="Print Selection", command=print_selection).place(x=0, y=160)
 
     root.mainloop()
 
