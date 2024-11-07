@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from PIL import Image, ImageTk
 from data import getCampusMap, getEdges, getHelpCoords, getIntersectionNodes
 import networkx as nx
@@ -41,37 +42,53 @@ def main():
         #else:
         #    canvas.create_oval(x-7, y-7, x+7, y+7, fill="pink")
 
+    edge_ids = {}
     for u, v, weight in edges:
         G.add_edge(u, v, weight=weight)
         x1, y1, _ = mergedMap[u]
         x2, y2, _ = mergedMap[v]
         edge_tag = f"{u}_{v}"
-        line_id = canvas.create_line(x1, y1, x2, y2, fill="blue", width=5, tags=edge_tag)
+        edge_id = canvas.create_line(x1, y1, x2, y2, fill="blue", width=5, tags=(edge_tag))
+        edge_ids[(u, v)] = edge_id
 
         # Bind click event to each edge to toggle its state
-        canvas.tag_bind(line_id, "<Button-1>", lambda event,
+        canvas.tag_bind(edge_id, "<Button-1>", lambda event,
                         u=u, v=v: toggle_edge(u, v))
 
-    def highlight_node(node, color="yellow"):
-        x, y = G.nodes[node]["pos"]
-        canvas.create_oval(x-5, y-5, x+5, y+5, fill=color, tags=node)
+    # def highlight_node(node, color="yellow"):
+    #     x, y = G.nodes[node]["pos"]
+    #     canvas.create_oval(x-5, y-5, x+5, y+5, fill=color, tags=node)
 
+    # def highlight_edge(u, v, color = "red"):
+    #     """Highlight an edge between two nodes with a specific color."""
+    #     # edge_id = edge_ids.get((u, v))
+    #     # if edge_id is not None:
+    #     #     canvas.itemconfig(edge_id, fill=color)
+    #     edge_id = edge_ids.get((u, v)) or edge_ids.get(
+    #         (v, u))  # Check both directions
+    #     if edge_id is not None:
+    #         canvas.itemconfig(edge_id, fill=color)
 
-    def highlight_edge(u, v, color="red"):
-        x1, y1 = G.nodes[u]["pos"]
-        x2, y2 = G.nodes[v]["pos"]
-        line_tag = f"{u}_{v}"
-        canvas.create_line(x1, y1, x2, y2, fill=color, width=3, tags=line_tag)
+    def highlight_path(path, color="green"):
+        """Highlight the edges in the current path with the specified color."""
+        for i in range(len(path) - 1):
+            u, v = path[i], path[i + 1]
+            edge_id = edge_ids.get((u, v)) or edge_ids.get(
+                (v, u))
+            if edge_id is not None:
+                canvas.itemconfig(edge_id, fill=color)
 
     def reset_graph():
-        for edge in G.edges():
-            highlight_edge(*edge, "blue")
+        for edge_id in edge_ids.values():
+            canvas.itemconfig(edge_id, fill="blue", width=5)
     
     def toggle_edge(u, v):
         print(f"Toggle edge: {u} -> {v}")
         edge_tag = f"{u}_{v}"
+        print(f"TAG: '{edge_tag}'")
         if G.has_edge(u, v):
             # Disable the edge: remove it from the graph and visually gray it out
+            print("Removing edge", u, v)
             G.remove_edge(u, v)
             canvas.itemconfig(edge_tag, fill="lightgray", dash=(4, 2), width=7)
         else:
@@ -87,26 +104,25 @@ def main():
         visited = set()
 
         def step():
+            reset_graph()
             if queue:
                 current_node, path = queue.pop(0)
                 if current_node in visited:
-                    canvas.after(500, step)
+                    canvas.after(300, step)
                     return
 
                 visited.add(current_node)
-                #highlight_node(current_node, "yellow")  # Visual highlight
+                highlight_path(path, "yellow")
 
                 if current_node == target:
-                    for i in range(len(path) - 1):
-                        highlight_edge(path[i], path[i + 1], "green")
+                    highlight_path(path, "green")
                     return
 
                 for neighbor in graph.neighbors(current_node):
                     if neighbor not in visited:
                         queue.append((neighbor, path + [neighbor]))
-                        highlight_edge(current_node, neighbor, "red")
 
-                canvas.after(500, step)
+                canvas.after(300, step)
 
         step()
 
@@ -115,6 +131,7 @@ def main():
         visited = set()
 
         def step():
+            reset_graph()
             if stack:
                 current_node, path = stack.pop()
                 if current_node in visited:
@@ -122,17 +139,15 @@ def main():
                     return
 
                 visited.add(current_node)
-                #highlight_node(current_node, "yellow")
+                highlight_path(path, "yellow")
 
                 if current_node == target:
-                    for i in range(len(path) - 1):
-                        highlight_edge(path[i], path[i + 1], "green")
+                    highlight_path(path, "green")
                     return
 
                 for neighbor in graph.neighbors(current_node):
                     if neighbor not in visited:
                         stack.append((neighbor, path + [neighbor]))
-                        highlight_edge(current_node, neighbor, "red")
 
                 canvas.after(500, step)
 
@@ -145,6 +160,7 @@ def main():
         visited = set()
 
         def step():
+            reset_graph()
             if queue:
                 current_dist, current_node, path = heapq.heappop(queue)
                 if current_node in visited:
@@ -152,11 +168,10 @@ def main():
                     return
 
                 visited.add(current_node)
-                highlight_node(current_node, "yellow")
+                #highlight_node(current_node, "yellow")
 
                 if current_node == target:
-                    for i in range(len(path) - 1):
-                        highlight_edge(path[i], path[i + 1], "green")
+                    highlight_path(path, "green")
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -167,22 +182,24 @@ def main():
                         distances[neighbor] = distance
                         heapq.heappush(
                             queue, (distance, neighbor, path + [neighbor]))
-                        highlight_edge(current_node, neighbor, "red")
+                        highlight_path(path + [neighbor], "yellow")
 
                 canvas.after(500, step)
 
         step()
 
     tk.Button(root, text="BFS", command=lambda: custom_bfs(
-        G, "Titan Student Union", "Humanities Building")).place(x=0, y=0)
+        G, "Titan_Student_Union", "Humanities_Building")).place(x=0, y=0)
     
     tk.Button(root, text="DFS", command=lambda: custom_dfs(
-        G, "Titan Student Union", "Humanities Building")).place(x=0, y=30)
+        G, "Titan_Student_Union", "Humanities_Building")).place(x=0, y=30)
     
     tk.Button(root, text="Dijkstra", command=lambda: custom_dijkstra(
-        G, "Titan Student Union", "Humanities Building")).place(x=0, y=60)
+        G, "Titan_Student_Union", "Humanities_Building")).place(x=0, y=60)
     
     tk.Button(root, text="Reset", command=reset_graph).place(x=0, y=90)
+
+    combo = ttk.Combobox(root)
 
     root.mainloop()
 
