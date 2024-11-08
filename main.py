@@ -252,12 +252,12 @@ def main():
 
     comboValues = list(campusMap.keys())
 
-    tk.Label(root, text="Start node: ").place(x=1281, y=120)
+    tk.Label(root, text="Start node: ").place(x=0, y=850)
     startNode = ttk.Combobox(root, values=comboValues)
-    startNode.place(x=1281, y=150)
-    tk.Label(root, text="End node: ").place(x=1281, y=180)
+    startNode.place(x=100, y=850)
+    tk.Label(root, text="End node: ").place(x=400, y=850)
     endNode = ttk.Combobox(root, values=comboValues)
-    endNode.place(x=1281, y=210)
+    endNode.place(x=500, y=210)
 
     root.mainloop()
 
