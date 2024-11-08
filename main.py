@@ -257,7 +257,7 @@ def main():
     startNode.place(x=100, y=850)
     tk.Label(root, text="End node: ").place(x=400, y=850)
     endNode = ttk.Combobox(root, values=comboValues)
-    endNode.place(x=500, y=210)
+    endNode.place(x=500, y=850)
 
     root.mainloop()
 
