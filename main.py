@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
 from data import getCampusMap, getEdges, getHelpCoords, getIntersectionNodes
 import networkx as nx
@@ -116,7 +116,7 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
-                    return
+                    return path
 
                 for neighbor in graph.neighbors(current_node):
                     if neighbor not in visited:
@@ -145,6 +145,7 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
+                    messagebox.showinfo("Path Found", f"Path: {path}")
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -176,6 +177,7 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
+                    messagebox.showinfo("Path Found", f"Path: {path}")
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -192,16 +194,41 @@ def main():
 
         step()
 
-    bfsBtn = tk.Button(root, text="BFS", command=lambda: custom_bfs(
-        G, startNode.get(), endNode.get()))
+    def startBfs():
+        start = startNode.get()
+        end = endNode.get()
+        if start == "" or end == "":
+            messagebox.showerror("Error", "Please select start and end nodes")
+            return
+        custom_bfs(G, startNode.get(), endNode.get())
+        messagebox.showinfo("DFS Done")
+
+    def startDfs():
+        start = startNode.get()
+        end = endNode.get()
+        if start == "" or end == "":
+            messagebox.showerror("Error", "Please select start and end nodes")
+            return
+        custom_dfs(G, startNode.get(), endNode.get())
+        messagebox.showinfo("DFS Done")
+
+    def startDijkstra():
+        start = startNode.get()
+        end = endNode.get()
+        if start == "" or end == "":
+            messagebox.showerror("Error", "Please select start and end nodes")
+            return
+        custom_dijkstra(G, startNode.get(), endNode.get())
+        messagebox.showinfo("Dijkstra Done")
+
+    
+    bfsBtn = tk.Button(root, text="BFS", command=startBfs)
     bfsBtn.place(x=0, y=0)
 
-    dfsBtn = tk.Button(root, text="DFS", command=lambda: custom_dfs(
-        G, startNode.get(), endNode.get()))
+    dfsBtn = tk.Button(root, text="DFS", command=startDfs)
     dfsBtn.place(x=0, y=30)
 
-    dijBtn = tk.Button(root, text="Dijkstra", command=lambda: custom_dijkstra(
-        G, startNode.get(), endNode.get()))
+    dijBtn = tk.Button(root, text="Dijkstra", command=startDijkstra)
     dijBtn.place(x=0, y=60)
 
     resetBtn = tk.Button(root, text="Reset", command=reset_graph)
