@@ -227,16 +227,16 @@ def main():
 
     
     bfsBtn = tk.Button(root, text="BFS", command=startBfs)
-    bfsBtn.place(x=1300, y=0)
+    bfsBtn.place(x=1281, y=0)
 
     dfsBtn = tk.Button(root, text="DFS", command=startDfs)
-    dfsBtn.place(x=1300, y=30)
+    dfsBtn.place(x=1281, y=30)
 
     dijBtn = tk.Button(root, text="Dijkstra", command=startDijkstra)
-    dijBtn.place(x=1300, y=60)
+    dijBtn.place(x=1281, y=60)
 
     resetBtn = tk.Button(root, text="Reset", command=reset_graph)
-    resetBtn.place(x=1300, y=90)
+    resetBtn.place(x=1281, y=90)
 
     def disalbeButtons():
         bfsBtn.config(state="disabled")
@@ -252,12 +252,12 @@ def main():
 
     comboValues = list(campusMap.keys())
 
-    tk.Label(root, text="Start node: ").place(x=1300, y=120)
+    tk.Label(root, text="Start node: ").place(x=1281, y=120)
     startNode = ttk.Combobox(root, values=comboValues)
-    startNode.place(x=1300, y=140)
-    tk.Label(root, text="End node: ").place(x=1300, y=160)
+    startNode.place(x=1281, y=150)
+    tk.Label(root, text="End node: ").place(x=1281, y=180)
     endNode = ttk.Combobox(root, values=comboValues)
-    endNode.place(x=1300, y=180)
+    endNode.place(x=1281, y=210)
 
     root.mainloop()
 
