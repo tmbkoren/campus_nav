@@ -116,7 +116,9 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
-                    messagebox.showinfo("Done", "Done")
+                    # distance = sum(edge[2] for edge in path)
+                    # messagebox.showinfo("Done", f"Done. Distance: {distance}")
+                    messagebox.showinfo("Done", f"Done")
                     return path
 
                 for neighbor in graph.neighbors(current_node):
@@ -146,7 +148,9 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
-                    messagebox.showinfo("Done", "Done")
+                    # distance = sum(edge[2] for edge in path)
+                    # messagebox.showinfo("Done", f"Done. Distance: {distance}")
+                    messagebox.showinfo("Done", f"Done")
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -178,7 +182,9 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
-                    messagebox.showinfo("Done", "Done")
+                    # distance = sum(edge[2] for edge in path)
+                    #messagebox.showinfo("Done", f"Done. Distance: {distance}")
+                    messagebox.showinfo("Done", f"Done. Distance: {current_dist}")
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -198,39 +204,39 @@ def main():
     def startBfs():
         start = startNode.get()
         end = endNode.get()
-        if start == "" or end == "":
-            messagebox.showerror("Error", "Please select start and end nodes")
+        if start == "" or end == "" or start==end:
+            messagebox.showerror("Error", "Invalid choice")
             return
         custom_bfs(G, startNode.get(), endNode.get())
 
     def startDfs():
         start = startNode.get()
         end = endNode.get()
-        if start == "" or end == "":
-            messagebox.showerror("Error", "Please select start and end nodes")
+        if start == "" or end == "" or start == end:
+            messagebox.showerror("Error", "Invalid choice")
             return
         custom_dfs(G, startNode.get(), endNode.get())
 
     def startDijkstra():
         start = startNode.get()
         end = endNode.get()
-        if start == "" or end == "":
-            messagebox.showerror("Error", "Please select start and end nodes")
+        if start == "" or end == "" or start == end:
+            messagebox.showerror("Error", "Invalid choice")
             return
         custom_dijkstra(G, startNode.get(), endNode.get())
 
     
     bfsBtn = tk.Button(root, text="BFS", command=startBfs)
-    bfsBtn.place(x=0, y=0)
+    bfsBtn.place(x=1300, y=0)
 
     dfsBtn = tk.Button(root, text="DFS", command=startDfs)
-    dfsBtn.place(x=0, y=30)
+    dfsBtn.place(x=1300, y=30)
 
     dijBtn = tk.Button(root, text="Dijkstra", command=startDijkstra)
-    dijBtn.place(x=0, y=60)
+    dijBtn.place(x=1300, y=60)
 
     resetBtn = tk.Button(root, text="Reset", command=reset_graph)
-    resetBtn.place(x=0, y=90)
+    resetBtn.place(x=1300, y=90)
 
     def disalbeButtons():
         bfsBtn.config(state="disabled")
@@ -246,10 +252,12 @@ def main():
 
     comboValues = list(campusMap.keys())
 
+    tk.Label(root, text="Start node: ").place(x=1300, y=120)
     startNode = ttk.Combobox(root, values=comboValues)
-    startNode.place(x=0, y=120)
+    startNode.place(x=1300, y=140)
+    tk.Label(root, text="End node: ").place(x=1300, y=160)
     endNode = ttk.Combobox(root, values=comboValues)
-    endNode.place(x=0, y=150)
+    endNode.place(x=1300, y=180)
 
     root.mainloop()
 
