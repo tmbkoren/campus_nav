@@ -184,7 +184,7 @@ def main():
                     enableButtons()
                     # distance = sum(edge[2] for edge in path)
                     #messagebox.showinfo("Done", f"Done. Distance: {distance}")
-                    messagebox.showinfo("Done", f"Done. Distance: {current_dist}")
+                    messagebox.showinfo("Done", f"Done. Distance: {current_dist}ft.")
                     return
 
                 for neighbor in graph.neighbors(current_node):
