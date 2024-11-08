@@ -1,16 +1,8 @@
 campusMap_nodes = {
     "Nutwood_Parking_Structure": (1170, 730, True),
-    # "Eastside Parking Structure": (),
-    # "State College Parking Structure": (),
-    # "Parking Lot A": (),
-    # "Parking Lot A(south)": {},
-    # "Parking Lot C(east)": {},
-    # "Parking Lot C(west)": {},
-    # "Parking Lot E": {},
-    # "ParkingPollak Library Lot G": {},
-    # "Parking Lot F": {},
-    # "Parking Lot I": {},
-    # "Parking Lot R": {},
+    "Parking_Lot_F": (1000, 200, True),
+    "ECS_Lawn": (800, 300, True),
+    "ECS_Buildings": (785, 180, True),
     "Titan_Shops": (840, 565, True),
     "Clayes_Performing_Arts_Center": (1000, 565, True),
     "Titan_Gym": (700, 500, True),
@@ -32,10 +24,24 @@ intersection_nodes = {
     "Nutwood_Upper_Left": (1065, 640, False),
     "Nutwood_Upper_Left_2": (1065, 653, False),
 
+    "LotF_Entry": (955, 230, False),
+
+    "ECS_Lawn_Right": (840, 310, False),
+    "ECS_Lawn_Upper_Left": (760, 240, False),
+    "ECS_Lawn_Lower_Left": (760, 340, False),
+
+    "ECS_Lower_Right": (815, 220, False),
+    "ECS_Right": (815, 180, False),
+    "ECS_Upper_Right": (815, 130, False),
+    "ECS_Lower_Left": (760, 220, False),
+    "ECS_Left": (760, 180, False),
+    "ECS_Upper_Left": (760, 130, False),
+
     "PLN_Upper": (880, 380, False),
     "PLN_Lower": (880, 457, False),
     "PLN_Lower_Right": (937, 457, False),
     "PLN_Lower_Right_Right": (957, 457, False),
+    "PLN_Lower_Left": (750 ,457, False),
     "PLN_Right": (957, 420, False),
     "PLN_Upper_Right": (957, 380, False),
     "PLN_Upper_Left": (850, 357, False),
@@ -86,6 +92,7 @@ intersection_nodes = {
 
     "KHS_Lower": (740, 530, False),
     "KHS_Lower_Intersection": (750, 560, False),
+    "KHS_Right": (780, 500, False),
 
     "LH_Left_Entrance": (1140, 350, False),
 
@@ -93,6 +100,8 @@ intersection_nodes = {
     "GymDR_1": (640, 610, False),
     "GymDR_2": (640, 560, False),
     "GymDR_3": (640, 442, False),
+    "GymDR_4": (640, 340, False),
+    "GymDR_5": (640, 265, False),
 }
 
 edges = {
@@ -101,6 +110,30 @@ edges = {
     ("Nutwood_Upper_Left", "Nutwood_Upper_Left_2", 29),
     ("Nutwood_Upper_Left_2", "TSU_Right_2_Right", 393),
     ("Nutwood_Upper_Left", "MH_Lower_Left", 278),
+
+    ("Parking_Lot_F", "LotF_Entry", 70),
+    ("LotF_Entry", "EC_Right_Intersection", 138),
+
+    ("ECS_Lawn", "ECS_Lawn_Right", 55),
+    ("ECS_Lawn", "ECS_Lawn_Upper_Left", 70),
+    ("ECS_Lawn", "ECS_Lawn_Lower_Left", 70),
+    ("ECS_Lawn_Upper_Left", "ECS_Lawn_Lower_Left", 120),
+    ("ECS_Lawn_Upper_Left", "ECS_Lower_Left", 55),
+    ("ECS_Lawn_Lower_Left", "PLN_Lower_Left", 70),
+    ("ECS_Lawn_Lower_Left", "EC_Left_Entrance", 155),
+    ("ECS_Lawn_Lower_Left", "GymDR_4", 250),
+    ("ECS_Lawn_Upper_Left", "GymDR_5", 250),
+    
+
+    ("ECS_Buildings", "ECS_Right", 55),
+    ("ECS_Buildings", "ECS_Left", 55),
+    ("ECS_Right", "ECS_Upper_Right", 50),
+    ("ECS_Right", "ECS_Lower_Right", 50),
+    ("ECS_Left", "ECS_Upper_Left", 50),
+    ("ECS_Left", "ECS_Lower_Left", 50),
+    ("ECS_Upper_Left", "ECS_Upper_Right", 55),
+    ("ECS_Lower_Left", "ECS_Lower_Right", 55),
+    ("ECS_Lower_Right", "ECS_Lawn_Right", 155),
 
     ("McCarthy_Hall", "MH_Upper", 159),
     ("McCarthy_Hall", "MH_Left_2", 104),
@@ -126,10 +159,12 @@ edges = {
     ("PLN_Upper_Right", "PLN_Right", 117),
     ("PLN_Lower", "PLN_Lower_Right", 234),
     ("PLN_Lower_Right", "PLN_Lower_Right_Right", 52),
+    ("PLN_Lower", "PLN_Lower_Left", 200),
     ("PLN_Lower_Right_Right", "PLN_Right", 119),
     ("PLN_Upper_Left", "EC_Left_Entrance", 70),
     ("PLN_Lower_Right_Right", "CPAC_Upper_Intersection", 192),
     ("PLN_Upper_Right", "Hum_Lower_2", 153),
+    ("PLN_Lower_Left", "KHS_Right", 138),
 
     ("Titan_Student_Union", "TSU_Right_1", 318),
     ("Titan_Student_Union", "TSU_Right_2", 253),
@@ -173,6 +208,7 @@ edges = {
     ("EC_Building", "EC_Right_Entrance", 79),
     ("EC_Building", "EC_Left_Entrance", 82),
     ("EC_Right_Entrance", "EC_Right_Intersection", 82),
+    ("EC_Left_Entrance", "ECS_Lawn_Right", 55),
     ("EC_Right_Intersection", "PLN_Upper_Right", 188),
     ("EC_Right_Intersection", "Hum_Left", 134),
 
@@ -184,6 +220,7 @@ edges = {
 
     ("KHS_Building", "KHS_Lower", 110),
     ("KHS_Lower", "KHS_Lower_Intersection", 101),
+    ("KHS_Right", "KHS_Lower_Intersection", 138),
     ("KHS_Lower_Intersection", "TG_Lower_Intersection", 167),
     ("KHS_Lower_Intersection", "Shop_Left", 138),
     ("KHS_Lower_Intersection", "SRC_Right", 150),
@@ -196,6 +233,8 @@ edges = {
 
     ("GymDR_1", "GymDR_2", 188),
     ("GymDR_2", "GymDR_3", 356),
+    ("GymDR_3", "GymDR_4", 295),
+    ("GymDR_4", "GymDR_5", 219),
 }
 
 def getCampusMap():
