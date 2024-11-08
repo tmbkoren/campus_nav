@@ -116,6 +116,7 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
+                    messagebox.showinfo("Done", "Done")
                     return path
 
                 for neighbor in graph.neighbors(current_node):
@@ -145,7 +146,7 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
-                    messagebox.showinfo("Path Found", f"Path: {path}")
+                    messagebox.showinfo("Done", "Done")
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -177,7 +178,7 @@ def main():
                 if current_node == target:
                     highlight_path(path, "green")
                     enableButtons()
-                    messagebox.showinfo("Path Found", f"Path: {path}")
+                    messagebox.showinfo("Done", "Done")
                     return
 
                 for neighbor in graph.neighbors(current_node):
@@ -201,7 +202,6 @@ def main():
             messagebox.showerror("Error", "Please select start and end nodes")
             return
         custom_bfs(G, startNode.get(), endNode.get())
-        messagebox.showinfo("DFS Done")
 
     def startDfs():
         start = startNode.get()
@@ -210,7 +210,6 @@ def main():
             messagebox.showerror("Error", "Please select start and end nodes")
             return
         custom_dfs(G, startNode.get(), endNode.get())
-        messagebox.showinfo("DFS Done")
 
     def startDijkstra():
         start = startNode.get()
@@ -219,7 +218,6 @@ def main():
             messagebox.showerror("Error", "Please select start and end nodes")
             return
         custom_dijkstra(G, startNode.get(), endNode.get())
-        messagebox.showinfo("Dijkstra Done")
 
     
     bfsBtn = tk.Button(root, text="BFS", command=startBfs)
