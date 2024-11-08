@@ -12,33 +12,33 @@ def main():
     canvas = tk.Canvas(root, width=1920, height=1080)
     canvas.pack()
 
-    # Replace with your campus image path
     campus_image = Image.open("img/campus_map_horizontal.png")
     bg_image = ImageTk.PhotoImage(campus_image)
     canvas.create_image(0, 0, anchor=tk.NW, image=bg_image)
 
     # Create NetworkX graph for pathfinding
     G = nx.Graph()
-
-    # Sample node and edge setup
-    helpCoords = getHelpCoords()
+    #helpCoords = getHelpCoords()
     campusMap = getCampusMap()
     intersection_nodes = getIntersectionNodes()
+
+    # merging the two dictionaries
     mergedMap = dict()
     mergedMap.update(campusMap)
     mergedMap.update(intersection_nodes)
     edges = getEdges()
 
-    # Add nodes and edges to NetworkX graph
-    for node, (x, y) in helpCoords.items():
-        G.add_node(node, pos=(x, y))
-        # Draw nodes on canvas
-        canvas.create_oval(x-5, y-5, x+5, y+5, fill="blue")
+    # helpful grid of dots to help with node placement
+    # for node, (x, y) in helpCoords.items():
+    #     G.add_node(node, pos=(x, y))
+    #     # Draw nodes on canvas
+    #     canvas.create_oval(x-5, y-5, x+5, y+5, fill="blue")
 
     for node, (x, y, display) in mergedMap.items():
         G.add_node(node, pos=(x, y))
         if display:
             canvas.create_oval(x-10, y-10, x+10, y+10, fill="red")
+        # displaying intersection nodes
         # else:
         #     canvas.create_oval(x-7, y-7, x+7, y+7, fill="pink")
 
@@ -139,7 +139,7 @@ def main():
             if stack:
                 current_node, path = stack.pop()
                 if current_node in visited:
-                    canvas.after(500, step)
+                    canvas.after(300, step)
                     return
 
                 visited.add(current_node)
@@ -157,7 +157,7 @@ def main():
                     if neighbor not in visited:
                         stack.append((neighbor, path + [neighbor]))
 
-                canvas.after(500, step)
+                canvas.after(300, step)
 
         step()
 
@@ -173,7 +173,7 @@ def main():
             if queue:
                 current_dist, current_node, path = heapq.heappop(queue)
                 if current_node in visited:
-                    canvas.after(500, step)
+                    canvas.after(300, step)
                     return
 
                 visited.add(current_node)
@@ -197,7 +197,7 @@ def main():
                             queue, (distance, neighbor, path + [neighbor]))
                         highlight_path(path + [neighbor], "yellow")
 
-                canvas.after(500, step)
+                canvas.after(300, step)
 
         step()
 
